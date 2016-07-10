@@ -1,0 +1,13 @@
+{
+    "name": "gender/cache",
+    "description": "Gentry PSR-6-compatible cache module",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marijn Ophorst",
+            "email": "marijn@monomelodies.nl"
+        }
+    ],
+    "require": {}
+}
