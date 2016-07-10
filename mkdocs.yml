@@ -1,0 +1,8 @@
+site_name: Gentry cache module
+site_url: http://gentry.monomelodies.nl/cache/docs/
+repo_url: https://github.com/gentry-php/cache
+
+pages:
+- Home:
+    - 'Quickstart': 'index.md'
+
