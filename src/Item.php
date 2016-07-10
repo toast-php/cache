@@ -4,6 +4,9 @@ namespace Gentry\Cache;
 
 use Psr\Cache\CacheItemInterface;
 
+/**
+ * Class representing an item in the cache.
+ */
 class Item implements CacheItemInterface
 {
     /**
@@ -29,16 +32,33 @@ class Item implements CacheItemInterface
      */
     private $value;
 
+    /**
+     * Returns the key this item was registered under.
+     *
+     * @return string The key.
+     */
     public function getKey()
     {
         return $this->key;
     }
 
+    /**
+     * Get the underlying value of the item.
+     *
+     * @return mixed
+     */
     public function get()
     {
         return $this->value;
     }
 
+    /**
+     * In PSR-6, this is supposed to check whether or not the item could be
+     * retrieved; however, in Gentry's simple implementation by this time we
+     * _know_ that that succeeded.
+     *
+     * @return true
+     */
     public function isHit()
     {
         return true; // for now
@@ -51,16 +71,24 @@ class Item implements CacheItemInterface
 
     /**
      * Not implemented for this cache interface.
+     *
+     * @param DateTimeInterface $expiration
+     * @return static The called object.
      */
     public function expiresAt($expiration)
     {
+        return $this;
     }
 
     /**
      * Not implemented for this cache interface.
+     *
+     * @param int|DateInterval $time
+     * @return static The called object.
      */
     public function expiresAfter($time)
     {
+        return $this;
     }
 }
 
