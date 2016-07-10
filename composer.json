@@ -1,5 +1,5 @@
 {
-    "name": "gender/cache",
+    "name": "gentry/cache",
     "description": "Gentry PSR-6-compatible cache module",
     "type": "library",
     "license": "MIT",
@@ -9,5 +9,20 @@
             "email": "marijn@monomelodies.nl"
         }
     ],
-    "require": {}
+    "require": {
+        "gentry/gentry": "^0.9.0",
+        "psr/cache": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gentry\\Cache\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gentry\\Cache\\": "src",
+            "Gentry\\Cache\\Tests\\": "tests",
+            "Gentry\\Cache\\Demo\\": "demo"
+        }
+    }
 }
