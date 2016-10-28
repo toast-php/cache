@@ -5,4 +5,5 @@ repo_url: https://github.com/gentry-php/cache
 pages:
 - Home:
     - 'Quickstart': 'index.md'
+    - 'Example': 'example.md'
 
