@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "gentry/gentry": "^0.9.0",
+        "gentry/gentry": "^0.10.0",
         "psr/cache": "^1.0"
     },
     "autoload": {
