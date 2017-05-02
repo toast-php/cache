@@ -4,7 +4,7 @@ Caching module for the Toast test framework
 Why would a testing framework need caching, you might ask? Well, sometimes a
 particular piece of code does something that isn't that easily otherwise checked
 (e.g. sending a mail), or if you write
-[acceptance tests](http://gentry.monomelodies.nl/acceptance) you might need a
+[acceptance tests](http://toast.monomelodies.nl/acceptance) you might need a
 way to check if the external server did something correctly. The module is
 called `cache` because it's fully PSR-6 compliant, but you really should think
 of it more as a shared pool you can access for temporary storage while running
@@ -14,7 +14,7 @@ a test scenario.
 
 ### Using composer (recommended)
 ```bash
-composer require gentry/cache
+composer require toast/cache
 ```
 
 ### Manual
