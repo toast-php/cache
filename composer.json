@@ -1,5 +1,5 @@
 {
-    "name": "toast-php/cache",
+    "name": "toast/cache",
     "description": "Toast PSR-6-compatible cache module",
     "type": "library",
     "license": "MIT",
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "toast-php/unit": "^1.1.0",
+        "toast/unit": "^1.1.0",
         "psr/cache": "^1.0"
     },
     "autoload": {
