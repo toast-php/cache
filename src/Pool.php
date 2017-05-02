@@ -1,13 +1,13 @@
 <?php
 
-namespace Gentry\Cache;
+namespace Toast\Cache;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\CacheItemInterface;
 use ErrorException;
 
 /**
- * A simple cache pool for Gentry.
+ * A simple cache pool for Toast.
  *
  * Unlike a "serious" cache implementation, this simply stores cached values in
  * a file in your system's temp-dir as a serialized string for the duration of
@@ -83,7 +83,7 @@ class Pool implements CacheItemPoolInterface
     /**
      * Get a singleton instance of the pool.
      *
-     * @return Gentry\Cache\Pool
+     * @return Toast\Cache\Pool
      */
     public static function getInstance()
     {
@@ -114,7 +114,7 @@ class Pool implements CacheItemPoolInterface
      *
      * @param array $keys An optional array of key strings to get. If omitted
      *  or empty an empty array is returned.
-     * @return array An array of Gentry\Cache\Item objects representing the
+     * @return array An array of Toast\Cache\Item objects representing the
      *  found items. Any keys not found will be initialized to a `null` Item
      *  (but not persisted yet).
      */
@@ -187,7 +187,7 @@ class Pool implements CacheItemPoolInterface
      * Save an item to the cache, and immediately persist.
      *
      * @param Psr\Cache\CacheItemInterface $item The cache item to save. Note
-     *  that this does _not_ have to be an instance of Gentry\Cache\Item; you
+     *  that this does _not_ have to be an instance of Toast\Cache\Item; you
      *  can store anything compatible as long as it's serializable.
      * @return true
      */
@@ -203,7 +203,7 @@ class Pool implements CacheItemPoolInterface
      *
      * @param Psr\Cache\CacheItemInterface $item The cache item to queue.
      * @return true
-     * @see Gentry\Cache\Pool::save
+     * @see Toast\Cache\Pool::save
      */
     public function saveDeferred(CacheItemInterface $item)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gentry\Cache;
+namespace Toast\Cache;
 
 use Psr\Cache;
 

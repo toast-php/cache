@@ -1,6 +1,6 @@
 <?php
 
-namespace Gentry\Cache;
+namespace Toast\Cache;
 
 use Psr\Cache\CacheItemInterface;
 
@@ -54,7 +54,7 @@ class Item implements CacheItemInterface
 
     /**
      * In PSR-6, this is supposed to check whether or not the item could be
-     * retrieved; however, in Gentry's simple implementation by this time we
+     * retrieved; however, in Toast's simple implementation by this time we
      * _know_ that that succeeded.
      *
      * @return true
