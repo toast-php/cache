@@ -1,5 +1,5 @@
 {
-    "name": "toast/cache",
+    "name": "toast-php/cache",
     "description": "Toast PSR-6-compatible cache module",
     "type": "library",
     "license": "MIT",
