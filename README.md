@@ -1,5 +1,5 @@
 # Cache
-Caching module for the Gentry test framework
+Caching module for the Toast test framework
 
 Why would a testing framework need caching, you might ask? Well, sometimes a
 particular piece of code does something that isn't that easily otherwise checked
@@ -19,7 +19,7 @@ composer require gentry/cache
 
 ### Manual
 - Download or clone the repository somewhere;
-- Register `/path/to/cache/src` for the `Gentry\Cache` namespace in your
+- Register `/path/to/cache/src` for the `Toast\Cache` namespace in your
   autoloader.
 
 ## Initialising a cache pool
@@ -28,7 +28,7 @@ Create a new `Pool` object like so:
 ```php
 <?php
 
-use Gentry\Cache\Pool;
+use Toast\Cache\Pool;
 
 $pool = new Pool;
 
@@ -42,7 +42,7 @@ Alternatively, the cache pool can also be accessed as a singleton:
 ```php
 <?php
 
-use Gentry\Cache\Pool;
+use Toast\Cache\Pool;
 
 $pool = Pool::getInstance();
 
@@ -53,14 +53,14 @@ This is escpecially handy when sharing throughout tests; although as long as the
 
 ## Storing and retrieving items in the cache
 Each item stored must be wrapped in an object implementing
-`Psr\Cache\CacheItemInterface`. Gentry supplies a `Gentry\Cache\Item` class for
+`Psr\Cache\CacheItemInterface`. Toast supplies a `Toast\Cache\Item` class for
 this purpose (but feel free to use something compatible...):
 
 ```php
 <?php
 
-use Gentry\Cache\Pool;
-use Gentry\Cache\Item;
+use Toast\Cache\Pool;
+use Toast\Cache\Item;
 
 $someVariable = 'I need to be cached!';
 
@@ -80,6 +80,6 @@ echo $item->get(); // string "I need to be cached!"
 ## Other operations
 PSR-6 defines a bunch of other methods you can use. Not all of these have
 relevant implementations since this simple cache is not meant to be used outside
-of Gentry so not every method (e.g. `expiresAt`) will make sence. However, see
+of Toast so not every method (e.g. `expiresAt`) will make sence. However, see
 the API docs for full descriptions.
 
