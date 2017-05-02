@@ -1,6 +1,6 @@
 {
-    "name": "gentry/cache",
-    "description": "Gentry PSR-6-compatible cache module",
+    "name": "toast/cache",
+    "description": "Toast PSR-6-compatible cache module",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -10,19 +10,12 @@
         }
     ],
     "require": {
-        "gentry/gentry": "^0.11.0",
+        "toast/unit": "^1.1.0",
         "psr/cache": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "Gentry\\Cache\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Gentry\\Cache\\": "src",
-            "Gentry\\Cache\\Tests\\": "tests",
-            "Gentry\\Cache\\Demo\\": "demo"
+            "Toast\\Cache\\": "src"
         }
     }
 }
