@@ -213,12 +213,12 @@ class Cache implements CacheInterface
      * @return bool Always returns true.
      * @throws Toast\Cache\InvalidArgumentException
      */
-    public function setMultiple($valueskeys)
+    public function setMultiple($values, $ttl = null)
     {
-        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
-            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
+        if (!(is_array($values) || (is_object($values) && $values instanceof Traversable))) {
+            throw new InvalidArgumentException('$values must be an array of an instance of Traversable');
         }
-        array_walk($keys, function ($value, $key) {
+        array_walk($values, function ($value, $key) {
             if (!is_string($key)) {
                 throw new InvalidArgumentException('Each $key must be a string');
             }
