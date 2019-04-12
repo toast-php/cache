@@ -30,12 +30,12 @@ return function () : Generator {
 
     /** getMultiple yields true */
     yield function () use ($object) {
-        $result = $object->getMultiple(iterable, 'MIXED');
+        $result = $object->getMultiple([], 'MIXED');
         assert(true);
     };
     /** getMultiple yields true */
     yield function () use ($object) {
-        $result = $object->getMultiple(iterable);
+        $result = $object->getMultiple([]);
         assert(true);
     };
 
@@ -59,13 +59,13 @@ return function () : Generator {
 
     /** deleteMultiple yields true */
     yield function () use ($object) {
-        $result = $object->deleteMultiple(iterable);
+        $result = $object->deleteMultiple([]);
         assert(true);
     };
 
     /** set yields true */
     yield function () use ($object) {
-        $result = $object->set('blarps', 'MIXED', null|int|DateInterval);
+        $result = $object->set('blarps', 'MIXED');
         assert(true);
     };
     /** set yields true */
@@ -76,12 +76,12 @@ return function () : Generator {
 
     /** setMultiple yields true */
     yield function () use ($object) {
-        $result = $object->setMultiple(null|int|DateInterval, 'MIXED');
+        $result = $object->setMultiple([], 12345);
         assert(true);
     };
     /** setMultiple yields true */
     yield function () use ($object) {
-        $result = $object->setMultiple(null|int|DateInterval);
+        $result = $object->setMultiple([]);
         assert(true);
     };
 
