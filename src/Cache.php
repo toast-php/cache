@@ -169,12 +169,19 @@ class Cache implements CacheInterface
     /**
      * Delete an array of items in batch.
      *
-     * @param array $keys An array of keys to deleted.
+     * @param iterable $keys The keys to deleted.
      * @return true
+     * @throws Toast\Cache\InvalidArgumentException
      */
-    public function deleteMultiple(array $keys)
+    public function deleteMultiple($keys)
     {
+        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
+            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
+        }
         array_walk($keys, function ($key) {
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Each $key must be a string');
+            }
             unset(self::$cache[$key]);
         });
         return true;
