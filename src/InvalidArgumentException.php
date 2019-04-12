@@ -2,10 +2,9 @@
 
 namespace Toast\Cache;
 
-use Psr\Cache;
+use Psr\SimpleCache;
 
-class InvalidArgumentException extends \InvalidArgumentException
-implements Cache\InvalidArgumentException
+class InvalidArgumentException extends \InvalidArgumentException implements SimpleCache\InvalidArgumentException
 {
 }
 
