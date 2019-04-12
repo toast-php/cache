@@ -96,13 +96,17 @@ class Cache implements CacheInterface
      * Get an item from the cache identified by $key.
      *
      * @param string $key The key to retrieve.
+     * @param mixed $default Optional default.
      * @return mixed If found, whatever was in the cache.
      * @throws InvalidArgumentException if no such key exists.
      */
-    public function get($key)
+    public function get(string $key, $default = null)
     {
         if (isset(self::$cache[$key])) {
             return self::$cache[$key];
+        }
+        if (isset($default)) {
+            return $default;
         }
         throw new InvalidArgumentException($key);
     }
