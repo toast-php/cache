@@ -170,7 +170,7 @@ class Cache implements CacheInterface
      * Delete an array of items in batch.
      *
      * @param iterable $keys The keys to deleted.
-     * @return true
+     * @return bool Always returns true.
      * @throws Toast\Cache\InvalidArgumentException
      */
     public function deleteMultiple($keys)
@@ -190,28 +190,54 @@ class Cache implements CacheInterface
     /**
      * Save an item to the cache, and immediately persist.
      *
-     * @param Psr\Cache\CacheInterface $item The cache item to save. Note
-     *  that this does _not_ have to be an instance of Toast\Cache\; you
-     *  can store anything compatible as long as it's serializable.
-     * @return true
+     * @param string $key
+     * @param mixed $value
+     * @param null|int|DateInterval $ttl Not implemented for Toast.
+     * @return bool Always returns true.
+     * @throws Toast\Cache\InvalidArgumentException if $key is not a legal
+     *  value.
      */
-    public function save(CacheInterface $item)
+    public function set($key, $value, $ttl = null)
     {
-        self::$cache[$item->getKey()] = $item;
+        self::$cache[$key] = $value;
         self::persist();
+        return true;
+    }
+
+    /**
+     * Delete an array of items in batch.
+     *
+     * @param iterable $values A list of key => value pairs.
+     * @param null|int|DateInterval $ttl Optional, not implemented in
+     *  Toast\Cache.
+     * @return bool Always returns true.
+     * @throws Toast\Cache\InvalidArgumentException
+     */
+    public function setMultiple($valueskeys)
+    {
+        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
+            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
+        }
+        array_walk($keys, function ($value, $key) {
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Each $key must be a string');
+            }
+            self::$cache[$key] = $value;
+        });
         return true;
     }
 
     /**
      * Mark an item to be saved at a later time.
      *
-     * @param Psr\Cache\CacheInterface $item The cache item to queue.
-     * @return true
+     * @param string $key
+     * @param mixed $value
+     * @return bool Always returns true.
      * @see Toast\Cache\Pool::save
      */
-    public function saveDeferred(CacheInterface $item)
+    public function setDeferred(string $key, $value) : bool
     {
-        $this->deferred[] = $item;
+        $this->deferred[$key] = $item;
         return true;
     }
 
@@ -222,9 +248,10 @@ class Cache implements CacheInterface
      */
     public function commit()
     {
-        while ($item = array_shift($this->deferred)) {
-            $this->save($item);
+        foreach ($this->deferred as $key => $value) {
+            self::$cache[$key] = $value;
         }
+        self::persist();
         return true;
     }
 }
