@@ -36,11 +36,13 @@ class Cache implements CacheInterface
 
     /**
      * Constructor. Sets up the pool instance and wakes it up if possible.
+     *
+     * @param string $path Path where to store the cache file.
+     * @return void
      */
-    public function __construct()
+    public function __construct(string $path)
     {
-        $this->client = getenv("GENTRY_CLIENT");
-        self::$path = sys_get_temp_dir()."/{$this->client}.cache";
+        self::$path = $path;
         self::$cache = [];
         $this->__wakeup();
     }
@@ -95,15 +97,17 @@ class Cache implements CacheInterface
     /**
      * Get a singleton instance of the cache.
      *
+     * @param string $path
      * @return Toast\Cache\Cache
+     * @see Toast\Cache\Cache::__construct
      */
-    public static function getInstance() : Cache
+    public static function getInstance(string $path) : Cache
     {
-        static $pool;
-        if (!isset($pool)) {
-            $pool = new static;
+        static $caches = [];
+        if (!isset($caches[$path])) {
+            $caches[$path] = new static($path);
         }
-        return $pool;
+        return $caches[$path];
     }
 
     /**
