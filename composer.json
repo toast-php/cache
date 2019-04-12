@@ -17,5 +17,9 @@
         "psr-4": {
             "Toast\\Cache\\": "src"
         }
+    },
+    "require-dev": {
+        "gentry/gentry": "^0.13.4",
+        "gentry/toast": "^0.1.0"
     }
 }
