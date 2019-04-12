@@ -2,18 +2,17 @@
 
 namespace Toast\Cache;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\CacheItemInterface;
+use Psr\SimpleCache\CacheInterface;
 use ErrorException;
 
 /**
- * A simple cache pool for Toast.
+ * A simple cache for Toast.
  *
  * Unlike a "serious" cache implementation, this simply stores cached values in
  * a file in your system's temp-dir as a serialized string for the duration of
  * this run.
  */
-class Pool implements CacheItemPoolInterface
+class Cache implements CacheInterface
 {
     /**
      * @var string The client ID for this set of test runs.
@@ -21,7 +20,7 @@ class Pool implements CacheItemPoolInterface
     private $client;
 
     /**
-     * @var array Psr\Cache\CacheItemInterface Array of deferred cache items.
+     * @var array Array of deferred cache items.
      */
     private $deferred = [];
 
@@ -31,8 +30,7 @@ class Pool implements CacheItemPoolInterface
     private static $path;
 
     /**
-     * @var array Psr\Cache\CacheItemInterface Key/value hash of the current
-     *  cache contents.
+     * @var array Key/value hash of the current cache contents.
      */
     private static $cache;
 
