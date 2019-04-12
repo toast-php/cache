@@ -46,6 +46,16 @@ class Cache implements CacheInterface
     }
 
     /**
+     * Expose the cache file name.
+     *
+     * @return string
+     */
+    public function getPath() : string
+    {
+        return self::$path;
+    }
+
+    /**
      * Magic destructor. Persists the cached data back to file.
      */
     public function __destruct()
@@ -55,8 +65,10 @@ class Cache implements CacheInterface
     
     /**
      * Persist the cached data back to file.
+     *
+     * @return void
      */
-    public static function persist()
+    public static function persist() : void
     {
         file_put_contents(self::$path, serialize(self::$cache));
         try {
@@ -68,8 +80,10 @@ class Cache implements CacheInterface
     /**
      * Magic wakeup method. Either reads the existing data from file, or else
      * persists it for the first time (so the cache file will exist).
+     *
+     * @return void
      */
-    public function __wakeup()
+    public function __wakeup() : void
     {
         if (file_exists(self::$path)) {
             self::$cache = unserialize(file_get_contents(self::$path));
@@ -79,11 +93,11 @@ class Cache implements CacheInterface
     }
 
     /**
-     * Get a singleton instance of the pool.
+     * Get a singleton instance of the cache.
      *
-     * @return Toast\Cache\Pool
+     * @return Toast\Cache\Cache
      */
-    public static function getInstance()
+    public static function getInstance() : Cache
     {
         static $pool;
         if (!isset($pool)) {
@@ -97,7 +111,7 @@ class Cache implements CacheInterface
      *
      * @param string $key The key to retrieve.
      * @param mixed $default Optional default.
-     * @return mixed If found, whatever was in the cache.
+     * @return mixed If found, whatever was in the cache, else null.
      * @throws InvalidArgumentException if $key is not a valid value.
      */
     public function get($key, $default = null)
@@ -105,7 +119,7 @@ class Cache implements CacheInterface
         if (!is_string($key)) {
             throw new InvalidArgumentException('$key must be a string');
         }
-        return self::$cache ?? $default;
+        return self::$cache[$key] ?? $default;
     }
 
     /**
