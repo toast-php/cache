@@ -98,40 +98,35 @@ class Cache implements CacheInterface
      * @param string $key The key to retrieve.
      * @param mixed $default Optional default.
      * @return mixed If found, whatever was in the cache.
-     * @throws InvalidArgumentException if no such key exists.
+     * @throws InvalidArgumentException if $key is not a valid value.
      */
-    public function get(string $key, $default = null)
+    public function get($key, $default = null)
     {
-        if (isset(self::$cache[$key])) {
-            return self::$cache[$key];
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('$key must be a string');
         }
-        if (isset($default)) {
-            return $default;
-        }
-        throw new InvalidArgumentException($key);
+        return self::$cache ?? $default;
     }
 
     /**
      * Get an array of items identified by $keys.
      *
-     * @param array $keys An optional array of key strings to get. If omitted
-     *  or empty an empty array is returned.
+     * @param iterable $keys An iterable of key strings to get.
+     * @param mixed $default Optional default.
      * @return array An array of Toast\Cache\ objects representing the
      *  found items. Any keys not found will be initialized to a `null` 
      *  (but not persisted yet).
+     * @throws Toast\Cache\InvalidArgumentException if any of the keys is not a
+     *  valid (string) value, or is $keys is not iterable.
      */
-    public function getMultiple(array $keys = [])
+    public function getMultiple($keys, $default = null)
     {
-        if (!$keys) {
-            return [];
+        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
+            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
         }
         $return = [];
         foreach ($keys as $key) {
-            try {
-                $return[] = $this->get($key);
-            } catch (InvalidArgumentException $e) {
-//                $return[] = new ($key, null);
-            }
+            $return[$key] = $this->get($key) ?? $default;
         }
         return $return;
     }
