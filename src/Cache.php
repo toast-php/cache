@@ -237,7 +237,7 @@ class Cache implements CacheInterface
      */
     public function setDeferred(string $key, $value) : bool
     {
-        $this->deferred[$key] = $item;
+        $this->deferred[$key] = $value;
         return true;
     }
 
