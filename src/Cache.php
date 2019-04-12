@@ -99,7 +99,7 @@ class Cache implements CacheInterface
      * @return mixed If found, whatever was in the cache.
      * @throws InvalidArgumentException if no such key exists.
      */
-    public function getItem($key)
+    public function get($key)
     {
         if (isset(self::$cache[$key])) {
             return self::$cache[$key];
@@ -112,11 +112,11 @@ class Cache implements CacheInterface
      *
      * @param array $keys An optional array of key strings to get. If omitted
      *  or empty an empty array is returned.
-     * @return array An array of Toast\Cache\Item objects representing the
-     *  found items. Any keys not found will be initialized to a `null` Item
+     * @return array An array of Toast\Cache\ objects representing the
+     *  found items. Any keys not found will be initialized to a `null` 
      *  (but not persisted yet).
      */
-    public function getItems(array $keys = [])
+    public function getMultiple(array $keys = [])
     {
         if (!$keys) {
             return [];
@@ -124,9 +124,9 @@ class Cache implements CacheInterface
         $return = [];
         foreach ($keys as $key) {
             try {
-                $return[] = $this->getItem($key);
+                $return[] = $this->get($key);
             } catch (InvalidArgumentException $e) {
-                $return[] = new Item($key, null);
+//                $return[] = new ($key, null);
             }
         }
         return $return;
@@ -138,7 +138,7 @@ class Cache implements CacheInterface
      * @param string $key The key to check.
      * @return bool True if the item exists, else false.
      */
-    public function hasItem($key)
+    public function has($key)
     {
         return isset(self::$cache[$key]);
     }
@@ -161,7 +161,7 @@ class Cache implements CacheInterface
      * @param string $key The item to delete.
      * @return true
      */
-    public function deleteItem($key)
+    public function delete($key)
     {
         unset(self::$cache[$key]);
         return true;
@@ -173,7 +173,7 @@ class Cache implements CacheInterface
      * @param array $keys An array of keys to deleted.
      * @return true
      */
-    public function deleteItems(array $keys)
+    public function deleteMultiple(array $keys)
     {
         array_walk($keys, function ($key) {
             unset(self::$cache[$key]);
@@ -184,12 +184,12 @@ class Cache implements CacheInterface
     /**
      * Save an item to the cache, and immediately persist.
      *
-     * @param Psr\Cache\CacheItemInterface $item The cache item to save. Note
-     *  that this does _not_ have to be an instance of Toast\Cache\Item; you
+     * @param Psr\Cache\CacheInterface $item The cache item to save. Note
+     *  that this does _not_ have to be an instance of Toast\Cache\; you
      *  can store anything compatible as long as it's serializable.
      * @return true
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheInterface $item)
     {
         self::$cache[$item->getKey()] = $item;
         self::persist();
@@ -199,11 +199,11 @@ class Cache implements CacheInterface
     /**
      * Mark an item to be saved at a later time.
      *
-     * @param Psr\Cache\CacheItemInterface $item The cache item to queue.
+     * @param Psr\Cache\CacheInterface $item The cache item to queue.
      * @return true
      * @see Toast\Cache\Pool::save
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheInterface $item)
     {
         $this->deferred[] = $item;
         return true;
