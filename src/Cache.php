@@ -154,16 +154,20 @@ class Cache implements CacheInterface
      *
      * @param string $key The key to check.
      * @return bool True if the item exists, else false.
+     * @throws Toast\Cache\InvalidArgumentException if $key is not a string.
      */
     public function has($key)
     {
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('$key must be a string');
+        }
         return isset(self::$cache[$key]);
     }
 
     /**
      * Clear the entire cache instance and persist this to disk.
      *
-     * @return true
+     * @return bool Always returns true.
      */
     public function clear()
     {
