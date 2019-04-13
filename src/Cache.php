@@ -253,7 +253,7 @@ class Cache implements CacheInterface
      * @return bool Always returns true.
      * @see Toast\Cache\Pool::save
      */
-    public function setDeferred(string $key, $value) : bool
+    public function defer(string $key, $value) : bool
     {
         $this->deferred[$key] = $value;
         return true;
