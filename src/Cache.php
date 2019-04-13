@@ -248,33 +248,5 @@ class Cache implements CacheInterface
         });
         return true;
     }
-
-    /**
-     * Mark an item to be saved at a later time.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return bool Always returns true.
-     * @see Toast\Cache\Pool::save
-     */
-    public function defer(string $key, $value) : bool
-    {
-        $this->deferred[$key] = $value;
-        return true;
-    }
-
-    /**
-     * Commit (persist) all deferred items.
-     *
-     * @return true
-     */
-    public function commit()
-    {
-        foreach ($this->deferred as $key => $value) {
-            self::$cache[$key] = $value;
-        }
-        self::persist();
-        return true;
-    }
 }
 
