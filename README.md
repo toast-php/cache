@@ -6,7 +6,7 @@ particular piece of code does something that isn't that easily otherwise checked
 (e.g. sending a mail), or if you write
 [acceptance tests](http://toast.monomelodies.nl/acceptance) you might need a
 way to check if the external server did something correctly. The module is
-called `cache` because it's fully PSR-6 compliant, but you really should think
+called `cache` because it's fully PSR-16 compliant, but you really should think
 of it more as a shared pool you can access for temporary storage while running
 a test scenario.
 
@@ -23,63 +23,56 @@ composer require toast/cache
   autoloader.
 
 ## Initialising a cache pool
-Create a new `Pool` object like so:
+Create a new `Toast\Cache\Cache` object like so:
 
 ```php
 <?php
 
-use Toast\Cache\Pool;
+use Toast\Cache\Cache;
 
-$pool = new Pool;
+$cache = new Cache('/path/to/storage');
 
 ```
 
-Each pool by default identifies itself using the `GENTRY_CLIENT` environment
-variable, which acts as a unique session ID of sorts.
-
-Alternatively, the cache pool can also be accessed as a singleton:
+Alternatively, the cache can also be accessed as a singleton:
 
 ```php
 <?php
 
-use Toast\Cache\Pool;
+use Toast\Cache\Cache;
 
-$pool = Pool::getInstance();
+$pool = Cache::getInstance('/path/to/storage');
 
 ```
 
 This is escpecially handy when sharing throughout tests; although as long as the
-`GENTRY_CLIENT` stays the same, the pool will reload existing data regardless.
+path stays the same, the cache will reload existing data regardless.
+
+Note that you can instantiate multiple, sandboxed caches using different paths.
 
 ## Storing and retrieving items in the cache
-Each item stored must be wrapped in an object implementing
-`Psr\Cache\CacheItemInterface`. Toast supplies a `Toast\Cache\Item` class for
-this purpose (but feel free to use something compatible...):
+Anything serializable can be stored in the cache using `set` or `setMultiple`:
 
 ```php
 <?php
 
-use Toast\Cache\Pool;
-use Toast\Cache\Item;
+use Toast\Cache\Cache;
 
 $someVariable = 'I need to be cached!';
 
-$cacheItem = new Item('some-unique-key', $someVariable);
-
-$pool = Pool::getInstance();
-$pool->save($cacheItem);
-$pool->hasItem('some-unique-key'); // true
+$pool = Cache::getInstance('/path/to/storage');
+$pool->save('some-unique-key', $someVariable);
+$pool->has('some-unique-key'); // true
 
 // ...somewhere else in your code...
 
-$item = Pool::getInstance()->getItem('some-unique-key');
-echo $item->get(); // string "I need to be cached!"
+$item = Cache::getInstance('/path/to/storage')->get('some-unique-key');
+echo $item; // string "I need to be cached!"
 
 ```
 
-## Other operations
-PSR-6 defines a bunch of other methods you can use. Not all of these have
-relevant implementations since this simple cache is not meant to be used outside
-of Toast so not every method (e.g. `expiresAt`) will make sence. However, see
-the API docs for full descriptions.
+## TTLs
+PSR-16 allows cached items to define an optional Time To Live (TTL). Since this
+does not make any sense in the context of unit testing, the parameter is
+ignored.
 
