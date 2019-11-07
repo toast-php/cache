@@ -3,9 +3,9 @@
 use Gentry\Gentry\Wrapper;
 
 /** Testsuite for Toast\Cache\Cache */
-return function ($test) : Generator {
+return function () : Generator {
     $cache = Wrapper::createObject(Toast\Cache\Cache::class, sys_get_temp_dir().'/toast.cache');
-    $test->beforeEach(function () use ($cache) {
+    $this->beforeEach(function () use ($cache) {
         $cache->clear();
     });
 
