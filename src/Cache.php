@@ -15,16 +15,6 @@ use ErrorException;
 class Cache implements CacheInterface
 {
     /**
-     * @var string The client ID for this set of test runs.
-     */
-    private $client;
-
-    /**
-     * @var array Array of deferred cache items.
-     */
-    private $deferred = [];
-
-    /**
      * @var string Full pathname of the temporary storage file.
      */
     private static $path;
