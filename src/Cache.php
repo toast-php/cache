@@ -17,12 +17,12 @@ class Cache implements CacheInterface
     /**
      * @var string Full pathname of the temporary storage file.
      */
-    private static $path;
+    private static string $path;
 
     /**
      * @var array Key/value hash of the current cache contents.
      */
-    private static $cache;
+    private static array $cache = [];
 
     /**
      * Constructor. Sets up the pool instance and wakes it up if possible.
@@ -33,7 +33,6 @@ class Cache implements CacheInterface
     public function __construct(string $path)
     {
         self::$path = $path;
-        self::$cache = [];
         $this->__wakeup();
     }
 
@@ -113,7 +112,10 @@ class Cache implements CacheInterface
         if (!is_string($key)) {
             throw new InvalidArgumentException('$key must be a string');
         }
-        return self::$cache[$key] ?? $default;
+        if (isset(self::$cache[$key]) && self::$cache[$key]) {
+            return array_shift(self::$cache[$key]);
+        }
+        return $default;
     }
 
     /**
@@ -134,7 +136,7 @@ class Cache implements CacheInterface
         }
         $return = [];
         foreach ($keys as $key) {
-            $return[$key] = $this->get($key) ?? $default;
+            $return[$key] = $this->get($key, $default);
         }
         return $return;
     }
@@ -159,7 +161,7 @@ class Cache implements CacheInterface
      *
      * @return bool Always returns true.
      */
-    public function clear()
+    public function clear() : bool
     {
         self::$cache = [];
         self::persist();
@@ -211,7 +213,8 @@ class Cache implements CacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        self::$cache[$key] = $value;
+        self::$cache[$key] = self::$cache[$key] ?? [];
+        self::$cache[$key][] = $value;
         self::persist();
         return true;
     }
@@ -234,7 +237,8 @@ class Cache implements CacheInterface
             if (!is_string($key)) {
                 throw new InvalidArgumentException('Each $key must be a string');
             }
-            self::$cache[$key] = $value;
+            self::$cache[$key] = self::$cache[$key] ?? [];
+            self::$cache[$key][] = $value;
         });
         return true;
     }
