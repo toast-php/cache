@@ -71,5 +71,17 @@ return function () : Generator {
         assert($cache->has('foo') === false);
         assert($cache->has('bar') === false);
     };
+
+    /** When storing multiple items under the same key, they are returned in order */
+    yield function () use ($cache) {
+        $cache->set('foo', 1);
+        $cache->set('foo', 2);
+        $foo = $cache->get('foo');
+        assert($foo === 1);
+        $foo = $cache->get('foo');
+        assert($foo === 2);
+        $foo = $cache->get('foo');
+        assert($foo === null);
+    };
 };
 
