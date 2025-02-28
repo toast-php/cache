@@ -4,6 +4,8 @@ namespace Toast\Cache;
 
 use Psr\SimpleCache\CacheInterface;
 use ErrorException;
+use DateInterval;
+use InvalidArgumentException;
 
 /**
  * A simple cache for Toast.
@@ -107,10 +109,10 @@ class Cache implements CacheInterface
      * @return mixed If found, whatever was in the cache, else null.
      * @throws InvalidArgumentException if $key is not a valid value.
      */
-    public function get($key, $default = null)
+    public function get($key, mixed $default = null)
     {
         if (!is_string($key)) {
-            throw new InvalidArgumentException('$key must be a string');
+            throw new InvalidArgumentException('`$key` must be a string.');
         }
         if (isset(self::$cache[$key]) && self::$cache[$key]) {
             return array_shift(self::$cache[$key]);
@@ -129,11 +131,8 @@ class Cache implements CacheInterface
      * @throws Toast\Cache\InvalidArgumentException if any of the keys is not a
      *  valid (string) value, or is $keys is not iterable.
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, mixed $default = null)
     {
-        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
-            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
-        }
         $return = [];
         foreach ($keys as $key) {
             $return[$key] = $this->get($key, $default);
@@ -148,11 +147,8 @@ class Cache implements CacheInterface
      * @return bool True if the item exists, else false.
      * @throws Toast\Cache\InvalidArgumentException if $key is not a string.
      */
-    public function has($key)
+    public function has($key) : bool
     {
-        if (!is_string($key)) {
-            throw new InvalidArgumentException('$key must be a string');
-        }
         return isset(self::$cache[$key]);
     }
 
@@ -174,7 +170,7 @@ class Cache implements CacheInterface
      * @param string $key The item to delete.
      * @return true
      */
-    public function delete($key)
+    public function delete($key) : bool
     {
         unset(self::$cache[$key]);
         return true;
@@ -187,14 +183,14 @@ class Cache implements CacheInterface
      * @return bool Always returns true.
      * @throws Toast\Cache\InvalidArgumentException
      */
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys) : bool
     {
-        if (!(is_array($keys) || (is_object($keys) && $keys instanceof Traversable))) {
-            throw new InvalidArgumentException('$keys must be an array of an instance of Traversable');
+        if (!is_iterable($keys)) {
+            throw new InvalidArgumentException('`$keys` must be an iterable.');
         }
         array_walk($keys, function ($key) {
             if (!is_string($key)) {
-                throw new InvalidArgumentException('Each $key must be a string');
+                throw new InvalidArgumentException('Each `$key` must be a string.');
             }
             unset(self::$cache[$key]);
         });
@@ -213,6 +209,12 @@ class Cache implements CacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
+        if (!is_string($key)) {
+            throw new InvalidArgumentException("`\$key` must be a string.");
+        }
+        if (!is_int($ttl) && !($ttl instanceof DateInterval) && !is_null($ttl)) {
+            throw new InvalidArgumentException("`\$ttl` must be an integer, a `DateInterval` or null.");
+        }
         self::$cache[$key] = self::$cache[$key] ?? [];
         self::$cache[$key][] = $value;
         self::persist();
@@ -230,12 +232,15 @@ class Cache implements CacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
-        if (!(is_array($values) || (is_object($values) && $values instanceof Traversable))) {
-            throw new InvalidArgumentException('$values must be an array of an instance of Traversable');
+        if (!is_iterable($values)) {
+            throw new InvalidArgumentException('`$values` must be an iterable.');
+        }
+        if (!is_int($ttl) && !($ttl instanceof DateInterval) && !is_null($ttl)) {
+            throw new InvalidArgumentException("`\$ttl` must be an integer, a `DateInterval` or null.");
         }
         array_walk($values, function ($value, $key) {
             if (!is_string($key)) {
-                throw new InvalidArgumentException('Each $key must be a string');
+                throw new InvalidArgumentException('Each `$key` must be a string.');
             }
             self::$cache[$key] = self::$cache[$key] ?? [];
             self::$cache[$key][] = $value;
